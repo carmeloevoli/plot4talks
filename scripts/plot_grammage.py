@@ -86,6 +86,66 @@ def plot_grammage():
 #    ax.legend(loc='lower right')
     plt.savefig('grammage_simple.pdf')
 
+def plot_diffusion():
+    fig = plt.figure(figsize=(11.5, 8.5))
+    ax = fig.add_subplot(111)
+
+    ax.set_ylabel(r'intensity')
+    ax.set_ylim([1e-2,2])
+    ax.set_yscale('log')
+    ax.set_xlabel(r'energy')
+    ax.set_xlim([1,1e3])
+    ax.set_xscale('log')
+
+    T = np.logspace(0, 3, 100)
+
+    ax.plot([10.,10.], [np.power(10. / T[0], -0.2), np.power(10. / T[0], -0.66)], color='tab:orange', linestyle=':', lw=2)
+    ax.text(10., .80, 'slow escape', color='tab:orange', fontsize=18, ha='center', va='center')
+
+    ax.plot([500.,500.], [np.power(500. / T[0], -0.2), np.power(500. / T[0], -0.66)], color='tab:orange', linestyle=':', lw=2)
+    ax.text(500., .35, 'fast escape', color='tab:orange', fontsize=18, ha='center', va='center')
+
+    ax.plot(T, np.power(T / T[0], -0.2), color='tab:red', label='injection')
+    ax.plot(T, np.power(T / T[0], -0.66), color='tab:blue', label='measured')
+
+    ax.text(70, 0.25, r'$E^{-\gamma}$', color='tab:red', fontsize=33)
+    ax.text(70, 0.02, r'$E^{-\gamma-\delta}$', color='tab:blue', fontsize=33)
+    
+    ax.legend()
+    plt.savefig('diffusion_simple.pdf')
+
+def plot_losses():
+    fig = plt.figure(figsize=(11.5, 8.5))
+    ax = fig.add_subplot(111)
+
+    ax.set_ylabel(r'intensity')
+    ax.set_ylim([1e-2,2])
+    ax.set_yscale('log')
+    ax.set_xlabel(r'energy')
+    ax.set_xlim([1e1,1e4])
+    ax.set_xscale('log')
+
+    T = np.logspace(1, 4, 100)
+
+    #ax.plot([10.,10.], [np.power(10. / T[0], -0.2), np.power(10. / T[0], -0.66)], color='tab:orange', linestyle=':', lw=2)
+    #ax.text(10., .80, 'slow escape', color='tab:orange', fontsize=18, ha='center', va='center')
+
+    #ax.plot([500.,500.], [np.power(500. / T[0], -0.2), np.power(500. / T[0], -0.66)], color='tab:orange', linestyle=':', lw=2)
+    #ax.text(500., .35, 'fast escape', color='tab:orange', fontsize=18, ha='center', va='center')
+
+    x = T / 10.
+    ax.plot(T, np.power(x, -0.2), color='tab:red', label='injection')
+    ax.plot(T, np.power(x, -0.66) * np.power(1. + np.power(T / 1e3, 15.), -0.35 / 15.), color='tab:blue', label='measured')
+
+    ax.text(70, 0.85, r'$E^{-\gamma}$', color='tab:red', fontsize=33)
+    ax.text(70, 0.30, r'$E^{-\gamma-\delta}$', color='tab:blue', fontsize=33)
+    ax.text(2.0e3, 3e-2, r'$E^{-\gamma-\frac{1+\delta}{2}}$', color='tab:blue', fontsize=33)
+
+    ax.legend()
+    plt.savefig('losses_simple.pdf')
+    
 if __name__== "__main__":
     print (f'{lambda_A(10.):5.1f} {lambda_A(12.):5.1f} {P_BC():5.2f}')
-    plot_grammage()
+    #plot_grammage()
+    #plot_diffusion()
+    plot_losses()
