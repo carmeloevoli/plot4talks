@@ -4,78 +4,72 @@ import matplotlib.pyplot as plt
 plt.style.use('review.mplstyle')
 import numpy as np
 import math
-    
-H = 4.
-z = np.linspace(-10., 10, 2000)
-
-def compute_free(l2, z_s):
-    f = 1. / np.power(np.pi * l2, 1.5) * np.exp(-np.power(z - z_s, 2.) / l2)
-    return f
-
-def compute_halo(l2, z_s, n_max):
+        
+def compute_halo(l2, z_s, H, n_max):
     f = 0
     for n in range(-n_max, n_max + 1):
-        print (n)
         z_prime = 2. * H * n + np.power(-1., n) * z_s
-        f += np.power(-1., n) * compute_free(l2, z_prime)
+        f += np.power(-1., n) * np.exp(-(z_prime)**2.0 / l2)
     return f
     
-def plot_images():
-    fig = plt.figure(figsize=(11.5, 8.5))
-    ax = fig.add_subplot(111)
+def compute_proton_burst(D, H, time, distance, dohalo = True):
+    dtau = D * time
+    d2 = distance * distance
+    g = 1. / np.power(4. * np.pi * dtau, 1.5) * np.exp(- d2 / 4. / dtau)
+    if dohalo:
+        g *= compute_halo(4. * D * time, 0., H, 10)
+    return g
     
-    ax.set_yscale('log')
-    ax.set_ylim([1e-20,0.004])
-    ax.set_ylabel('propagator')
-    ax.set_xlabel(r'z')
-    ax.set_xlim([-10.,10.])
-
-    G = compute_free(36., 0.)
-    ax.plot(z, G, color='red', zorder=1, label='free', linestyle=':')
-
-    G = compute_halo(36., 0., 1)
-    ax.plot(z, G, color='orange', zorder=1, label='n = 1')
-
-#    print(G)
-#    G = compute_halo(16., 0., 2)
-#    ax.plot(z, G, color='green', zorder=1, label='n = 2')
-
-    G = compute_halo(36., 0., 10)
-    ax.plot(z, G, color='blue', zorder=1, label='n = 3', linestyle=':')
-
-    print(G)
-    #compute_halo(ax, 16., 0., 3, 'tab:blue', 'n = 3')
-    #compute_gaussian(ax, 0.1, 'tab:blue', 'Dt = 0.1')
-    #compute_gaussian(ax, 0.2, 'tab:orange', 't = 0.2')
-    #compute_gaussian(ax, 0.5, 'tab:green', 't = 0.5')
-    #compute_gaussian(ax, 2., 'tab:purple', 't = 2')
-    #compute_gaussian(ax, 5., 'tab:olive', 't = 5')
-    #compute_gaussian(ax, 10., 'tab:cyan', 't = 10')
-
-    #ax.plot([0,0],[0.,3.],':',color='tab:gray', linewidth=2)
-    ax.legend(loc='best')
-    plt.savefig('halo_images.pdf')
-
-def compute_sum(n_max, H, R_d):
-    f = 0.
-    for n in range(-n_max, n_max + 1):
-        print (n)
-        x = 2. * n * H / R_d
-        f += np.power(-1., n) * (np.sqrt(1. + x * x) - np.sqrt(x * x))
-    return f
-
-def plot_sum():
-    fig = plt.figure(figsize=(11.5, 8.5))
-    ax = fig.add_subplot(111)
-
-    H = 1.
-    R_d = 100.
+def plot_protons():
+    fig = plt.figure(figsize=(17.5, 8.))
     
-    for i in range(100):
-        f = compute_sum(i, H, R_d)
-        ax.plot(i, np.abs(f), 'o', color='tab:blue')
+    kpc = 3.1e21 # cm
+    D = 10e28 # cm2/s
+    Myr = 3e13 # s
+    
+    ax1 = fig.add_subplot(121)
 
-    plt.savefig('halo_sum.pdf')
+    ax1.set_xscale('log')
+    ax1.set_xlabel('t [Myr]')
+    ax1.set_xlim([0.1, 1e2])
+    ax1.set_ylim([0, 1.1])
+    ax1.set_ylabel('propagator')
+    
+    t = np.logspace(-1, 2, 1000)
+    y_a = []
+    y_b = []
+    for t_i in t:
+        y_a.append(compute_proton_burst(D, 1. * kpc, t_i * Myr, kpc, True))
+        y_b.append(compute_proton_burst(D, 1. * kpc, t_i * Myr, kpc, False))
+    ax1.plot(t, y_a / max(y_a), color='tab:red')
+    ax1.plot(t, y_b / max(y_b), linestyle = ':', color='tab:blue')
+
+    t_d = kpc * kpc / 4. / D / Myr
+    ax1.plot([t_d, t_d], [0, 10], ':', color='tab:orange')
+    ax1.text(1.0, 0.9, r'$\frac{d^2}{4 D}$', fontsize=35, color='tab:orange')
+
+    ax2 = fig.add_subplot(122)
+
+    #ax2.set_xscale('log')
+    ax2.set_xlabel('distance [kpc]')
+    ax2.set_ylim([0, 1.1])
+    #ax2.set_ylabel('propagator')
+    ax2.set_xlim([0, 10])
+
+    d = np.logspace(-1, 1, 1000)
+    y_a = []
+    y_b = []
+    for d_i in d:
+        y_a.append(compute_proton_burst(D, kpc, 10. * Myr, d_i * kpc, True))
+        y_b.append(compute_proton_burst(D, kpc, 10. * Myr, d_i * kpc, False))
+    ax2.plot(d, y_a / max(y_a), color='tab:red')
+    #ax2.plot(d, y_b / max(y_b), linestyle = ':')
+
+    r_d = 2. * np.sqrt(D * 10. * Myr) / kpc
+    ax2.plot([r_d, r_d], [0, 10], ':', color='tab:orange')
+    ax2.text(3.7, 0.9, r'$\sqrt{4 D \tau}$', fontsize=35, color='tab:orange')
+
+    plt.savefig('green_protons.pdf')
 
 if __name__== "__main__":
-    plot_sum()
+    plot_protons()
