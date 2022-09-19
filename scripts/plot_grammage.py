@@ -144,8 +144,70 @@ def plot_losses():
     ax.legend()
     plt.savefig('losses_simple.pdf')
     
+def D_R(R, D_0, delta, Delta_delta, s, R_b):
+    beta = 1.
+    return D_0 * beta * np.power(R, delta) / np.power(1. + np.power(R / R_b, Delta_delta / s), s)
+
+def plot_critical_grammage():
+    fig = plt.figure(figsize=(8.5, 8.))
+    ax = fig.add_subplot(111)
+
+    R = np.logspace(1, 4, 100)
+
+    year = 3.14e7
+    Myr = 1e6 * year
+    kpc = 3.1e21
+    km_s = 1e5
+    s = 0.1
+    Delta_delta = 0.2
+
+    u = 5.0 * km_s
+    v = 3e10 # cm/s
+    delta = 0.54
+    D_0 = 2.2 * 1e28 # cm^2/s
+    H = 5. * kpc
+    R_b = 312.
+    mu = 2.3e-3 # gr/cm^2
+
+    f_He = 0.1
+    Sigma_He = np.power(4, 2./3.)
+
+    m = 1.67e-24 * (1. + Sigma_He * f_He) / (1. + f_He) # gr
+    sigma_Fe = 48. * np.power(60., 0.7) * 1e-27 # check
+    sigma_O = 48. * np.power(16., 0.7) * 1e-27 # check
+    sigma_C = 48. * np.power(12., 0.7) * 1e-27 # check
+
+    #D = D_0 * np.power(R, delta) / np.power(1. + np.power(R / R_b, Delta_delta / s), s)
+    X = mu * (v / 2. / u) * (1. - np.exp(-u * H / D_R(R, D_0, delta, Delta_delta, s, R_b)))
+    ax.plot(R, X, color='tab:blue', label='this work')
+
+    ax.plot(R, (m / sigma_O) * R / R, linestyle='--', color='tab:orange')
+    ax.plot(R, (m / sigma_C) * R / R, linestyle='--', color='tab:green')
+    ax.plot(R, (m / sigma_Fe) * R / R, linestyle='--', color='tab:red')
+
+    ax.fill_between([1e1,1e4],[0.7,0.7],0.,facecolor='tab:olive',alpha=0.5)
+
+    ax.text(400, 7.45, 'C$^{12}_{6}$', fontsize=20, color='tab:green')
+    ax.text(400, 4.75, 'O$^{16}_{8}$', fontsize=20, color='tab:orange')
+    ax.text(400, 1.85, 'Fe$^{56}_{26}$', fontsize=20, color='tab:red')
+    ax.text(400, 0.86, 'Galactic', fontsize=20, color='tab:blue', rotation=-30)
+    ax.text(15, 0.75, 'Sources', fontsize=20, color='tab:olive', rotation=0)
+
+    #ax.legend(fontsize=14)
+
+    ax.set_xscale('log')
+    ax.set_xlim([10, 1e4])
+    ax.set_yscale('log')
+    ax.set_ylim([0.4, 10])
+    ax.set_xlabel('R [GV]')
+    ax.set_ylabel('X [gr/cm$^2$]')
+
+    plt.savefig('grammage_critical.pdf')
+
+    
 if __name__== "__main__":
     print (f'{lambda_A(10.):5.1f} {lambda_A(12.):5.1f} {P_BC():5.2f}')
-    #plot_grammage()
+    plot_grammage()
+    plot_critical_grammage()
     #plot_diffusion()
-    plot_losses()
+    #plot_losses()
