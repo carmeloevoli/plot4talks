@@ -1,4 +1,5 @@
 *.DS_Store
 scripts/data
 scripts/kiss_tables
+scripts/*.pdf
 scripts/*.mplstyle
