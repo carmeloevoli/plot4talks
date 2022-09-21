@@ -12,7 +12,7 @@ def set_axes(ax):
     ax.set_xlabel('Rigidity [GV]')
     #Set y-axis
     ax.set_yscale('log')
-    ax.set_ylim([1e-4, 1e4])
+    ax.set_ylim([1e-3, 1e4])
     ax.set_ylabel(r'R$^2$ I [GV m$^{-2}$ s$^{-1}$ sr$^{-1}$]')
 
 def plot_data(ax, filename, color, norm, label, Z):
@@ -67,6 +67,8 @@ def get_color(Z):
         return 'salmon'
     elif Z == 'Fe':
         return 'tab:gray'
+    elif Z == 'Ni':
+        return 'indigo'
     else:
         return 'Something is wrong'
 
@@ -111,6 +113,7 @@ def plot_allgalactic():
     plot_data_from_Etot(ax, 'CALET_H_kineticEnergy.txt', get_color('H'), 1., 'H', 1)
 #    plot_data_from_Etot(ax, 'C_CALET_Etot.txt', 'tab:brown', 1., 'C', 6)
 #    plot_data_from_Etot(ax, 'O_CALET_Etot.txt', 'tab:olive', 1., 'O', 8)
+    plot_data_from_Etot(ax, 'CALET_Ni_kineticEnergy.txt', get_color('Ni'), 1., 'Ni', 1)
 
     ### NUCLEON ###
     plot_data_from_Etot(ax, 'NUCLEON_H_totalEnergy.txt', get_color('H'), 1., 'H', 1)
@@ -135,6 +138,7 @@ def plot_allgalactic():
     ax.text(7e5, yCR(12.), 'Al', color=get_color('Al'), fontsize=fontsize)
     ax.text(7e5, yCR(13.), 'Si', color=get_color('Si'), fontsize=fontsize)
     ax.text(7e5, yCR(14.), 'Fe', color=get_color('Fe'), fontsize=fontsize)
+    ax.text(7e5, yCR(15.), 'Ni', color=get_color('Ni'), fontsize=fontsize)
 
     ax.text(2, 1.3e4, 'Credits: AMS-02, CALET, CREAM, DAMPE, NUCLEON', fontsize=15)
 ##    plot_data_from_Etot(ax, 'C_PAMELA_Etot.txt', 'tab:blue', 1e-5, 'CALET', 6.0)
