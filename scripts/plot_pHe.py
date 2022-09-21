@@ -70,7 +70,7 @@ def plot_He():
     plot_data_from_Etot(ax, 'CREAM_III_He_totalEnergy.txt', 2, 2.7, 'tab:orange', 'CREAM-III', 'o', 1.)
     #plot_data_from_Etot(ax, 'BESS-TeV_He_totalEnergy.txt', 2, 2.7, 'tab:olive', 'BESS-TeV', 'o', 1., 1)
     #plot_data(ax, 'CALET_He_kineticEnergy.txt', 2.7, 'tab:brown', 'CALET', 'o', 1.)
-    #plot_data(ax, 'DAMPE_He_kineticEnergy.txt', 2.7, 'tab:blue', 'DAMPE', 'o', 1.)
+    plot_data_from_Etot(ax, 'DAMPE_He_totalEnergy.txt', 2, 2.7, 'tab:blue', 'DAMPE', 'o', 1.)
 
     ax.text(2e2, 1.5e3, 'He', fontsize=26)
 
@@ -89,6 +89,6 @@ def plot_pHe_ratio():
     plt.savefig('pHe_ratio.pdf')
 
 if __name__== "__main__":
-    plot_pHe_ratio()
+    #plot_pHe_ratio()
     #plot_H()
-    #plot_He()
+    plot_He()
