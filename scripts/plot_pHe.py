@@ -77,6 +77,35 @@ def plot_He():
     ax.legend(fontsize=18)
     plt.savefig('He_highenergy.pdf')
 
+def plot_p_and_He():
+    fig = plt.figure(figsize=(12., 8.))
+    ax = fig.add_subplot(111)
+    set_axes(ax)
+    ax.set_xlim([1e2,1e6])
+    ax.set_ylim([8e3,1e6])
+    ax.set_ylabel('R$^3$ I [GV$^2$ m$^{-2}$ s$^{-1}$ sr$^{-1}$]')
+    ax.set_yscale('log')
+    
+    plot_data(ax, 'NUCLEON_H_totalEnergy.txt', 3.0, 'darkgray', 'NUCLEON', 'o', 1., 1)
+    plot_data(ax, 'AMS-02_H_rigidity.txt', 3.0, 'tab:red', 'AMS-02', 'o', 1.)
+    plot_data(ax, 'PAMELA_H_rigidity.txt', 3.0, 'tab:purple', 'PAMELA', 'o', 1.)
+    plot_data(ax, 'CREAM_III_H_totalEnergy.txt', 3.0, 'tab:orange', 'CREAM-III', 'o', 1.)
+    #plot_data(ax, 'BESS-TeV_H_totalEnergy.txt', 2.7, 'tab:olive', 'BESS-TeV', 'o', 1., 1)
+    plot_data(ax, 'CALET_H_kineticEnergy.txt', 3.0, 'tab:brown', 'CALET', 'o', 1.)
+    plot_data(ax, 'DAMPE_H_kineticEnergy.txt', 3.0, 'tab:blue', 'DAMPE', 'o', 1.)
+    
+    ax.legend(fontsize=16)
+
+    plot_data_from_Etot(ax, 'NUCLEON_He_totalEnergy.txt', 2, 3.0, 'darkgray', 'NUCLEON', 'v', 1., 1)
+    plot_data(ax, 'AMS-02_He_rigidity.txt', 3.0, 'tab:red', 'AMS-02', 'v', 1.)
+    plot_data(ax, 'PAMELA_He_rigidity.txt', 3.0, 'tab:purple', 'PAMELA', 'v', 1.)
+    plot_data_from_Etot(ax, 'CREAM_III_He_totalEnergy.txt', 2, 3.0, 'tab:orange', 'CREAM-III', 'v', 1.)
+    #plot_data_from_Etot(ax, 'BESS-TeV_He_totalEnergy.txt', 2, 2.7, 'tab:olive', 'BESS-TeV', 'o', 1., 1)
+    #plot_data(ax, 'CALET_He_kineticEnergy.txt', 2.7, 'tab:brown', 'CALET', 'o', 1.)
+    plot_data_from_Etot(ax, 'DAMPE_He_totalEnergy.txt', 2, 3.0, 'tab:blue', 'DAMPE', 'v', 1.)
+
+    plt.savefig('H_and_He_highenergy.pdf')
+    
 def plot_pHe_ratio():
     fig = plt.figure(figsize=(10., 8.))
     ax = fig.add_subplot(111)
@@ -90,5 +119,6 @@ def plot_pHe_ratio():
 
 if __name__== "__main__":
     #plot_pHe_ratio()
-    #plot_H()
+    plot_H()
     plot_He()
+    plot_p_and_He()
