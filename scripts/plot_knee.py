@@ -84,12 +84,25 @@ def plot_data_T2E(ax, A, filename, color, fmt, zorder, label, norm=1.0):
     ax.errorbar(E, y, yerr=y_err, fmt=fmt, markeredgecolor=color, color=color,
                 elinewidth=1.5, capthick=2.5, markersize=5.5, capsize=4.5, zorder=zorder)
 
-def plot_unpublished_argo(ax):
+def plot_unpublished_argo_light(ax):
     slope = 2.6
     filename = '../data/unpublished_ARGO_light.txt'
-    lgEmin, lgEmax, flux, stat, syst = np.loadtxt(filename, usecols=(0,1,2,3,4), skiprows=1, unpack=True)
-    x = np.sqrt(np.power(10., lgEmin) * np.power(10., lgEmax)) * 1e3
-    ax.plot(x, np.power(x, slope) * flux, '*', color='tab:red', label='ARGO-YBJ (preliminary)')
+    E, y, y_err_min, y_err_max = np.loadtxt(filename, usecols=(0,1,2,3), skiprows=1, unpack=True)
+    y_err = [y - y_err_min, y_err_max - y]
+    color='tab:red'
+    label='ARGO-YBJ (preliminary)'
+    ax.errorbar(E, y, yerr=y_err, fmt='*', markeredgecolor=color, color=color,
+                elinewidth=1.5, capthick=2.5, markersize=5.5, capsize=4.5, label=label)
+
+def plot_unpublished_hawc_light(ax):
+    slope = 2.6
+    filename = '../data/unpublished_HAWC_light.txt'
+    E, y, y_err_min, y_err_max = np.loadtxt(filename, usecols=(0,1,2,3), skiprows=1, unpack=True)
+    y_err = [y - y_err_min, y_err_max - y]
+    color='tab:orange'
+    label='HAWC (preliminary)'
+    ax.errorbar(E, y, yerr=y_err, fmt='*', markeredgecolor=color, color=color,
+                elinewidth=1.5, capthick=2.5, markersize=5.5, capsize=4.5, label=label)
 
 def plot_unpublished_grapes_H(ax):
     filename = '../data/unpublished_GRAPES3_H.txt'
@@ -243,20 +256,36 @@ def plot_O():
     ax.legend(fontsize=14)
     my_savefig(fig, 'knee_O_data')
 
+def plot_Fe():
+    fig = plt.figure(figsize=(12.5,9.5))
+    ax = fig.add_subplot(111)
+    set_axes(ax)
+    ax.set_ylim([1e2, 1e4])
+
+    fmt = 'o'
+    #plot_data(ax, 'NUCLEON_He_totalEnergy.txt', 'tab:olive', fmt, 1, 'NUCLEON')
+    plot_data_R2E(ax, 26., 'AMS-02_Fe_rigidity.txt', 'tab:gray', fmt, 2, 'AMS-02')
+    #plot_data(ax, 'CREAM_III_He_totalEnergy.txt', 'tab:green', fmt, 3, 'CREAM')
+    plot_data_T2E(ax, 56., 'CALET_Fe_kineticEnergyPerNucleon.txt', 'tab:green', fmt, 4, 'CALET')
+    #plot_data(ax, 'DAMPE_He_kineticEnergy.txt', 'tab:red', fmt, 5, 'DAMPE')
+
+    ax.legend(fontsize=14)
+    my_savefig(fig, 'knee_Fe_data')
+
 def plot_light():
     fig = plt.figure(figsize=(12.5,9.5))
     ax = fig.add_subplot(111)
     set_axes(ax)
     ax.set_ylim([2e2, 2e4])
-    ax.set_xlim([1e3, 1e8])
-
+    
     fmt = 's'
-    plot_data(ax, 'ARGO-YBJ_light_totalEnergy.txt', 'tab:green', fmt, 1, 'ARGO-YBJ')
-    plot_data(ax, 'HAWC_light_totalEnergy.txt', 'tab:red', fmt, 2, 'HAWC')
+    #plot_data(ax, 'ARGO-YBJ_light_totalEnergy.txt', 'tab:green', fmt, 1, 'ARGO-YBJ')
+    #plot_data(ax, 'HAWC_light_totalEnergy.txt', 'tab:red', fmt, 2, 'HAWC')
 
-    #plot_unpublished_argo(ax)
+    plot_unpublished_argo_light(ax)
+    plot_unpublished_hawc_light(ax)
 
-    plot_combined_light(ax)
+#    plot_combined_light(ax)
 
     ax.legend(fontsize=14)
     my_savefig(fig, 'knee_light_data')
@@ -266,4 +295,5 @@ if __name__== "__main__":
     plot_He()
     plot_C()
     plot_O()
-    #plot_light()
+    plot_Fe()
+    plot_light()
