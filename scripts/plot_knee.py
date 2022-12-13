@@ -263,6 +263,7 @@ def plot_C():
     fig = plt.figure(figsize=(12.5,9.5))
     ax = fig.add_subplot(111)
     set_axes(ax)
+    ax.set_xlim([2e2, 1e6])
 
     fmt = 'o'
     plot_data(ax, 'NUCLEON_C_totalEnergy.txt', 'tab:olive', fmt, 1, 'NUCLEON')
@@ -275,10 +276,23 @@ def plot_C():
     ax.legend(fontsize=14)
     my_savefig(fig, 'knee_C_data')
 
+def plot_N():
+    fig = plt.figure(figsize=(12.5,9.5))
+    ax = fig.add_subplot(111)
+    set_axes(ax)
+    ax.set_xlim([2e2, 1e6])
+
+    fmt = 'o'
+    plot_data_R2E(ax, 7., 'AMS-02_N_rigidity.txt', 'tab:gray', fmt, 2, 'AMS-02')
+
+    ax.legend(fontsize=14)
+    my_savefig(fig, 'knee_N_data')
+
 def plot_O():
     fig = plt.figure(figsize=(12.5,9.5))
     ax = fig.add_subplot(111)
     set_axes(ax)
+    ax.set_xlim([2e2, 1e6])
 
     fmt = 'o'
     plot_data(ax, 'NUCLEON_O_totalEnergy.txt', 'tab:olive', fmt, 1, 'NUCLEON')
@@ -295,6 +309,7 @@ def plot_Ne():
     fig = plt.figure(figsize=(12.5,9.5))
     ax = fig.add_subplot(111)
     set_axes(ax)
+    ax.set_xlim([2e2, 1e6])
 
     fmt = 'o'
     plot_data(ax, 'NUCLEON_Ne_totalEnergy.txt', 'tab:olive', fmt, 1, 'NUCLEON')
@@ -311,6 +326,7 @@ def plot_Mg():
     fig = plt.figure(figsize=(12.5,9.5))
     ax = fig.add_subplot(111)
     set_axes(ax)
+    ax.set_xlim([2e2, 1e6])
 
     fmt = 'o'
     plot_data(ax, 'NUCLEON_Mg_totalEnergy.txt', 'tab:olive', fmt, 1, 'NUCLEON')
@@ -327,6 +343,7 @@ def plot_Si():
     fig = plt.figure(figsize=(12.5,9.5))
     ax = fig.add_subplot(111)
     set_axes(ax)
+    ax.set_xlim([2e2, 1e6])
 
     fmt = 'o'
     plot_data(ax, 'NUCLEON_Si_totalEnergy.txt', 'tab:olive', fmt, 1, 'NUCLEON')
@@ -343,6 +360,7 @@ def plot_Fe():
     fig = plt.figure(figsize=(12.5,9.5))
     ax = fig.add_subplot(111)
     set_axes(ax)
+    ax.set_xlim([2e2, 1e6])
 
     fmt = 'o'
     plot_data(ax, 'NUCLEON_Fe_totalEnergy.txt', 'tab:olive', fmt, 1, 'NUCLEON')
@@ -378,6 +396,7 @@ if __name__== "__main__":
     plot_H()
     plot_He()
     plot_C()
+    plot_N()
     plot_O()
     plot_Ne()
     plot_Mg()
