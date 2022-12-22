@@ -147,17 +147,17 @@ def get_KASCADE_2005_SIBYLL_light():
     return x_H, y_H + y_He, y_H_err + y_He_err
 
 def get_ICETOP_light():
-    filename = 'kiss_tables/ICECUBE-ICETOP_SIBYLL-2.1_H_totalEnergy.txt'
+    filename = 'kiss_tables/IceCube_SIBYLL-2.1_H_totalEnergy.txt'
     x_H, y_H, y_H_stat_err, y_H_sys_err = np.loadtxt(filename, usecols=(0,1,2,4), unpack=True, skiprows=7)
     y_H_err = np.sqrt(y_H_stat_err * y_H_stat_err + y_H_sys_err * y_H_sys_err)
 
-    filename = 'kiss_tables/ICECUBE-ICETOP_SIBYLL-2.1_He_totalEnergy.txt'
+    filename = 'kiss_tables/IceCube_SIBYLL-2.1_He_totalEnergy.txt'
     x_He, y_He, y_He_stat_err, y_He_sys_err = np.loadtxt(filename, usecols=(0,1,2,4), unpack=True, skiprows=7)
     y_He_err = np.sqrt(y_He_stat_err * y_He_stat_err + y_He_sys_err * y_He_sys_err)
     
     diff = max(abs(x_H - x_He))
     assert (diff < 1e-20)
-    
+        
     return x_H, y_H + y_He, y_H_err + y_He_err
     
 def get_CREAM_light():
@@ -175,7 +175,6 @@ def get_CREAM_light():
     assert (diff < 0.01)
     
     return x_H, y_H + y_He, y_H_err + y_He_err
-    
     
 def plot_combined_light(ax):
     slope = 2.6
@@ -380,26 +379,40 @@ def plot_light():
     set_axes(ax)
     ax.set_ylim([2e2,2e4])
     
+#   LIGHT
     fmt = 's'
     plot_data(ax, 'ARGO-YBJ_light_totalEnergy.txt', 'tab:green', fmt, 1, 'ARGO-YBJ')
     plot_data(ax, 'HAWC_light_totalEnergy.txt', 'tab:red', fmt, 2, 'HAWC')
-
     plot_unpublished_argo_light(ax)
     plot_unpublished_hawc_light(ax)
-
     plot_combined_light(ax)
 
     ax.legend(fontsize=16)
+
+#   PROTONS
+    fmt = 'o'
+    plot_data(ax, 'NUCLEON_H_totalEnergy.txt', 'lightgray', fmt, 1, 'NUCLEON')
+    plot_data(ax, 'AMS-02_H_rigidity.txt', 'lightgray', fmt, 2, 'AMS-02')
+    plot_data(ax, 'CREAM_III_H_kineticEnergy.txt', 'lightgray', fmt, 3, 'CREAM')
+    plot_data(ax, 'CALET_H_kineticEnergy.txt', 'lightgray', fmt, 4, 'CALET')
+    plot_data(ax, 'DAMPE_H_kineticEnergy.txt', 'lightgray', fmt, 5, 'DAMPE')
+
+    fmt = 'o'
+#    plot_data(ax, 'TUNKA-133_H_totalEnergy.txt', 'tab:gray', fmt, 1, 'TUNKA-133 (QGSJET-01)')
+#    plot_data(ax, 'ICECUBE-ICETOP_SIBYLL-2.1_H_totalEnergy.txt', 'tab:olive', fmt, 1, 'ICETOP (SIBYLL-2.1)')
+#    plot_data(ax, 'KASCADE_2011_QGSJET-II-02_H_totalEnergy.txt', 'tab:brown', fmt, 1, 'KASCADE (QGSJET-II-02)')
+#    plot_data(ax, 'KASCADE_2011_SIBYLL-2.1_H_totalEnergy.txt', 'tab:cyan', fmt, 1, 'KASCADE (SIBYLL-2.1)')
+
     my_savefig(fig, 'knee_light_data')
 
 if __name__== "__main__":
-    plot_H()
-    plot_He()
-    plot_C()
-    plot_N()
-    plot_O()
-    plot_Ne()
-    plot_Mg()
-    plot_Si()
-    plot_Fe()
+#    plot_H()
+#    plot_He()
+#    plot_C()
+#    plot_N()
+#    plot_O()
+#    plot_Ne()
+#    plot_Mg()
+#    plot_Si()
+#    plot_Fe()
     plot_light()

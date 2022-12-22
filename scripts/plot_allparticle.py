@@ -66,18 +66,18 @@ def plot_allparticle():
     SetAxes(ax)
     ax.set_ylim([1e5, 1e7])
 
-    plot_data(ax, 'Auger2021_allParticle_totalEnergy.txt', 'o', 'tab:blue', 'Auger 2021')
-    plot_data(ax, 'Auger2019_allParticle_totalEnergy.txt', 'o', 'tab:purple', 'Auger 2019')
-    plot_data(ax, 'TA_allParticle_totalEnergy.txt', 'o', 'tab:red', 'Telescope Array')
+    #plot_data(ax, 'Auger2021_allParticle_totalEnergy.txt', 'o', 'tab:blue', 'Auger 2021')
+    plot_data(ax, 'Auger2019_allParticle_totalEnergy.txt', 'o', 'tab:red', 'Auger 2019')
+    plot_data(ax, 'TA_allParticle_totalEnergy.txt', 'o', 'tab:blue', 'Telescope Array')
 
 #    plot_data(ax, 'kiss_tables/allparticle_TIBET_QGSJET+HD_Etot.txt', '^', 'darkorange', 'TIBET - QGSJET+HD')
 #    plot_data(ax, 'kiss_tables/allparticle_TIBET_QGSJET+PD_Etot.txt', 'o', 'tab:orange', 'TIBET - QGSJET+PD')
-#    plot_data(ax, 'Tibet_SIBYLL+HD_allparticle_totalEnergy.txt', '*', 'darkorange', 'TIBET - SIBYLL+HD')
+    plot_data(ax, 'Tibet_SIBYLL+HD_allparticle_totalEnergy.txt', '*', 'darkorange', 'TIBET - SIBYLL+HD')
 
-#    plot_data(ax, 'TUNKA-133_allParticle_totalEnergy.txt', 'o', 'tab:cyan', 'TUNKA-133')
+    plot_data(ax, 'TUNKA-133_allParticle_totalEnergy.txt', 'o', 'tab:cyan', 'TUNKA-133')
 
-#    plot_data(ax, 'KASCADE_2011_QGSJET-II-02_allParticle_totalEnergy.txt', '^', 'tab:olive', 'KASCADE - QGSJET-II-02')
-#    plot_data(ax, 'KASCADE_2011_SIBYLL-2.1_allParticle_totalEnergy.txt', '*', 'm', 'KASCADE - SIBYLL-2.1')
+    plot_data(ax, 'KASCADE_2011_QGSJET-II-02_allParticle_totalEnergy.txt', '^', 'tab:olive', 'KASCADE - QGSJET-II-02')
+    plot_data(ax, 'KASCADE_2011_SIBYLL-2.1_allParticle_totalEnergy.txt', '*', 'm', 'KASCADE - SIBYLL-2.1')
 #    #plot_data_back(ax, 'output/allparticle_KASCADE_EPOS-199_Etot.txt', 'o', 'm', 'KASCADE - EPOS-199')
 #
 #    plot_data(ax, 'kiss_tables/allparticle_KASCADEGrande_SIBYLL-2.3_Etot.txt', '^', 'm', 'KASCADE-Grande - SIBYLL 2.3')
@@ -86,11 +86,11 @@ def plot_allparticle():
 #    #plot_data(ax, 'kiss_tables/allparticle_KASCADEGrande_QGSJET-II-04_Etot.txt', '^', 'tab:pink', 'KASCADE-Grande - QGSJET II-04')
 #    #plot_data(ax, 'kiss_tables/allparticle_KASCADEGrande_EPOS-LHC_Etot.txt', '^', 'm', 'KASCADE-Grande - EPOS-LHC')
 
-#    plot_data(ax, 'IceCube_SIBYLL-2.1_allParticle_totalEnergy.txt', '^', 'tab:green', 'IceCube-IceTop - Sibyll-2.1')
-#    plot_data(ax, 'TALE_allParticle_totalEnergy.txt', '^', 'tab:brown', 'TALE')
-#
-#    plot_data(ax, 'NUCLEON_allParticle_totalEnergy.txt', 'o', 'tab:gray', 'NUCLEON')
-#    plot_data(ax, 'HAWC_allParticle_totalEnergy.txt', 'o', 'tab:purple', 'HAWC')
+    plot_data(ax, 'IceCube_SIBYLL-2.1_allParticle_totalEnergy.txt', '^', 'tab:green', 'IceCube-IceTop - Sibyll-2.1')
+    plot_data(ax, 'TALE_allParticle_totalEnergy.txt', '^', 'tab:brown', 'TALE')
+
+    plot_data(ax, 'NUCLEON_allParticle_totalEnergy.txt', 'o', 'tab:gray', 'NUCLEON')
+    plot_data(ax, 'HAWC_allParticle_totalEnergy.txt', 'o', 'tab:purple', 'HAWC')
 
     plt.annotate('4 PeV', xy=(4e6, 2.5e6), xytext=(4e6, 1.25e6), fontsize=18, ha='center', va='bottom',
                 arrowprops=dict(facecolor='black', shrink=0.2),
