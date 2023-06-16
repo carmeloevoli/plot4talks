@@ -55,17 +55,34 @@ def set_axes(ax):
     ax.set_xlim([2e1,1e3])
     ax.set_xlabel('R [GV]')
     #ax.set_yscale('log')
-    ax.set_ylim([0.06,0.3])
+    #ax.set_ylim([0.01,0.3])
     ax.set_ylabel('secondary/primary')
 
 def plot_BC():
-    fig = plt.figure(figsize=(11.5, 8))
+    fig = plt.figure(figsize=(11.5, 8.5))
     ax = fig.add_subplot(111)
     set_axes(ax)
     ax.set_ylim([0.05,0.3])
     ax.set_xlim([1e1, 1e3])
+
+    m = 1.67e-24 # gr
+    sigma_BC = 60. * 1e-27 # cm2
+    
+    Xcr = m / sigma_BC
+
+    print (Xcr)
+    
+    BC = 0.3
+    nmean = 1. * (0.1 / 2.) # cm-3
+    clight = 3e10 # cm / s
+    
+    print (BC / nmean / clight / sigma_BC / (3.1e13))
+    
+    p = np.logspace(1, 3, 100)
+    ax.plot(p, (8.5 / Xcr) * (p / p[0])**(-0.36), '--', color='tab:gray', zorder=1, lw=3, label=r'$\chi = 8.5$~g cm$^{-2}$ (R / 10 GV)$^{-0.36}$')
+
     plot_data(ax, 'AMS-02_Be_C_rigidity.txt', 0., 'tab:orange', 'Be/C (x 2.7)', 'o', 2.7)
-    plot_data(ax, 'AMS-02_Li_C_rigidity.txt', 0., 'tab:green', 'Li/C (x 1.4)', 'o', 1.4)
+    plot_data(ax, 'AMS-02_Li_C_rigidity.txt', 0., 'tab:blue', 'Li/C (x 1.4)', 'o', 1.4)
     plot_data(ax, 'AMS-02_B_C_rigidity.txt', 0., 'tab:red', 'B/C', 'o', 1)
 
     ax.text(14., 0.07, 'data from AMS-02', fontsize=20)
@@ -100,6 +117,25 @@ def plot_BC_scaled():
 
     plt.savefig('LiBeB_C_scaled.pdf',format='pdf',dpi=300)
 
+def plot_protons():
+    fig = plt.figure(figsize=(11.5, 8))
+    ax = fig.add_subplot(111)
+    ax.set_xscale('log')
+    #ax.set_yscale('log')
+    ax.set_xlim([1e1, 2e3])
+    ax.set_ylim([1.4, 2.2])
+    ax.set_xlabel('R [GV]', labelpad=10)
+    ax.set_ylabel(r'$R^{2.8}$ I$_{\rm H}$', labelpad=10)
+
+    ax.text(13, 1.45, '10$^{-4}$ GV$^{-1}$ m$^{-2}$ s$^{-1}$ sr$^{-1}$', fontsize=20)
+
+    plot_data(ax, 'PAMELA_H_rigidity.txt', 2.8, 'tab:orange', 'PAMELA', 'o', 0.93e-4)
+    plot_data(ax, 'AMS-02_H_rigidity.txt', 2.8, 'tab:blue', 'AMS-02', 'o', 1e-4)
+
+    ax.legend()
+
+    plt.savefig('protons_he.pdf',format='pdf',dpi=300)
+
 def plot_FeO():
     fig = plt.figure(figsize=(10.5, 8))
     ax = fig.add_subplot(111)
@@ -111,7 +147,26 @@ def plot_FeO():
     ax.legend(fontsize=26)
     plt.savefig('Fe_O_AMS02.pdf')
 
+def plot_BeB():
+    fig = plt.figure(figsize=(11.5, 8.5))
+    ax = fig.add_subplot(111)
+    ax.set_xlim([2e0,1e3])
+    ax.set_xscale('log')
+
+    ax.set_ylim([0.2,0.5])
+
+    plot_data(ax, 'AMS-02_Be_B_rigidity.txt', 0., 'tab:red', 'Be/O', 'o', 1)
+    ax.hlines(0.36, 1e0, 1e3, linestyle='--', color='tab:gray', zorder=1)
+
+    ax.set_xlabel('R [GV]', labelpad=10)
+    ax.set_ylabel(r'Be/B', labelpad=10)
+
+    #ax.legend(fontsize=26)
+    plt.savefig('BeB_AMS02.pdf')
+
 if __name__== "__main__":
     plot_BC()
-    plot_BC_scaled()
+#    plot_BC_scaled()
 #    plot_FeO()
+#    plot_protons()
+#    plot_BeB()
