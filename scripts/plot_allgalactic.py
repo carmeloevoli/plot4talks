@@ -15,22 +15,32 @@ def set_axes(ax):
     ax.set_ylim([1e-3, 1e4])
     ax.set_ylabel(r'R$^2$ I [GV m$^{-2}$ s$^{-1}$ sr$^{-1}$]')
 
+def get_data(filename):
+    E, dJdE, err_low_1, err_high_1, err_low_2, err_high_2 = np.loadtxt("kiss_tables/" + filename, usecols=(0,1,2,3,4,5), unpack=True)
+    err_low = err_low_1 + err_low_2
+    err_high = err_high_1 + err_high_2
+    dJdE_err = 0.5 * (err_low + err_high)
+    return E, dJdE, dJdE_err
+
 def plot_data(ax, filename, color, norm, label, Z):
-    E, dJdE, err_low, err_high = np.loadtxt("kiss_tables/" + filename,skiprows=7,usecols=(0,1,2,3),unpack=True)
+    E, dJdE, dJdE_err = get_data(filename)
     y = norm * np.power(E, 2.0) * dJdE
-    dJdE_err = .5 * norm * (err_low + err_high)
-    y_err = np.power(E, 2.0) * dJdE_err
+    y_err = norm * np.power(E, 2.0) * dJdE_err
     ax.errorbar(E, y, yerr=y_err, fmt='o', label=label, markeredgecolor=color, color=color, elinewidth=1, capthick=1, zorder=Z, markersize=5)
-#    yspline = interpolate.splrep(np.log10(E), np.log10(y), s=0)
-#    ynew = interpolate.splev(np.log10(10.), yspline, der=0)
-#    print (filename, np.power(10., ynew))
 
 def plot_data_from_Etot(ax, filename, color, norm, label, Z):
-    E, dJdE, err_low, err_high = np.loadtxt("kiss_tables/" + filename,skiprows=7,usecols=(0,1,2,3),unpack=True)
+    E, dJdE, dJdE_err = get_data(filename)
     R = E / float(Z)
     y = norm / float(Z) * np.power(E, 2.0) * dJdE
-    dJdE_err = .5 * norm * (err_low + err_high) / float(Z)
-    y_err = np.power(E, 2.0) * dJdE_err
+    y_err = norm * np.power(E, 2.0) * dJdE_err / float(Z)
+    ax.errorbar(R, y, yerr=y_err, fmt='o', label=label, markeredgecolor=color, color=color, elinewidth=1, capthick=1, zorder=Z, markersize=5)
+    
+def plot_data_from_Ekn(ax, filename, color, norm, label, Z, A):
+    E, dJdE, dJdE_err = get_data(filename)
+    A_Z = float(A) / float(Z)
+    R = A_Z * E
+    y = norm * np.power(E, 2.0) * dJdE * A_Z
+    y_err = norm * np.power(E, 2.0) * dJdE_err * A_Z
     ax.errorbar(R, y, yerr=y_err, fmt='o', label=label, markeredgecolor=color, color=color, elinewidth=1, capthick=1, zorder=Z, markersize=5)
 
 def yCR(i):
@@ -73,7 +83,7 @@ def get_color(Z):
         return 'Something is wrong'
 
 def plot_allgalactic():
-    fig = plt.figure(figsize=(12.5, 9.5))
+    fig = plt.figure(figsize=(12.5, 9.0))
     ax = fig.add_subplot(111)
     set_axes(ax)
 
@@ -94,33 +104,35 @@ def plot_allgalactic():
     plot_data(ax, 'AMS-02_Si_rigidity.txt', get_color('Si'), 1., 'Si', 14)
     plot_data(ax, 'AMS-02_Fe_rigidity.txt', get_color('Fe'), 1., 'Fe', 26)
 
-    ### CREAM ###
-    plot_data_from_Etot(ax, 'CREAM_III_H_totalEnergy.txt', get_color('H'), 1., 'H', 1)
-    plot_data_from_Etot(ax, 'CREAM_III_He_totalEnergy.txt', get_color('He'), 1., 'He', 2)
-#    # Li
-#    # Be
-#    # B
-    plot_data_from_Etot(ax, 'CREAM_II_C_totalEnergy.txt', get_color('C'), 1., 'C', 6)
-#    # N
-    plot_data_from_Etot(ax, 'CREAM_II_O_totalEnergy.txt', get_color('O'), 1., 'O', 8)
-#    # F
-    plot_data_from_Etot(ax, 'CREAM_II_Ne_totalEnergy.txt', get_color('Ne'), 1., 'Ne', 10)
-    plot_data_from_Etot(ax, 'CREAM_II_Mg_totalEnergy.txt', get_color('Mg'), 1., 'Mg', 12)
-    plot_data_from_Etot(ax, 'CREAM_II_Si_totalEnergy.txt', get_color('Si'), 1., 'Si', 14)
-    plot_data_from_Etot(ax, 'CREAM_II_Fe_totalEnergy.txt', get_color('Fe'), 1., 'Fe', 26)
+#    ### CREAM ###
+    plot_data_from_Ekn(ax, 'CREAM_H_kineticEnergy.txt', get_color('H'), 1., 'H', 1, 1)
+    plot_data_from_Ekn(ax, 'CREAM_He_kineticEnergyPerNucleon.txt', get_color('He'), 1., 'He', 2, 4)
+    # Li
+    # Be
+    # B
+    plot_data_from_Ekn(ax, 'CREAM_C_kineticEnergyPerNucleon.txt', get_color('C'), 1., 'C', 6, 12)
+    # N
+    plot_data_from_Ekn(ax, 'CREAM_O_kineticEnergyPerNucleon.txt', get_color('O'), 1., 'O', 8, 16)
+    #
+    plot_data_from_Ekn(ax, 'CREAM_Ne_kineticEnergyPerNucleon.txt', get_color('Ne'), 1., 'Ne', 10, 20)
+    plot_data_from_Ekn(ax, 'CREAM_Mg_kineticEnergyPerNucleon.txt', get_color('Mg'), 1., 'Mg', 12, 24)
+    plot_data_from_Ekn(ax, 'CREAM_Si_kineticEnergyPerNucleon.txt', get_color('Si'), 1., 'Si', 14, 28)
+    plot_data_from_Ekn(ax, 'CREAM_Fe_kineticEnergyPerNucleon.txt', get_color('Fe'), 1., 'Fe', 26, 56)
 
-    ### CALET ###
+#    ### CALET ###
     plot_data_from_Etot(ax, 'CALET_H_kineticEnergy.txt', get_color('H'), 1., 'H', 1)
-#    plot_data_from_Etot(ax, 'C_CALET_Etot.txt', 'tab:brown', 1., 'C', 6)
-#    plot_data_from_Etot(ax, 'O_CALET_Etot.txt', 'tab:olive', 1., 'O', 8)
-    plot_data_from_Etot(ax, 'CALET_Ni_kineticEnergy.txt', get_color('Ni'), 1., 'Ni', 1)
+    plot_data_from_Etot(ax, 'CALET_He_kineticEnergy.txt', get_color('He'), 1., 'He', 2)
+    plot_data_from_Ekn(ax, 'CALET_O_kineticEnergyPerNucleon.txt', get_color('O'), 1., 'O', 8, 16)
+    plot_data_from_Ekn(ax, 'CALET_Fe_kineticEnergyPerNucleon.txt', get_color('Fe'), 1., 'O', 26, 56)
+#    plot_data_from_Ekn(ax, 'CALET_Ni_kineticEnergyPerNucleon.txt', get_color('Ni'), 1., 'O', 26, 56)
 
-    ### NUCLEON ###
-    plot_data_from_Etot(ax, 'NUCLEON_H_totalEnergy.txt', get_color('H'), 1., 'H', 1)
-    plot_data_from_Etot(ax, 'NUCLEON_He_totalEnergy.txt', get_color('He'), 1., 'He', 2)
+#    ### NUCLEON ###
+#    plot_data_from_Etot(ax, 'NUCLEON_H_totalEnergy.txt', get_color('H'), 1., 'H', 1)
+#    plot_data_from_Etot(ax, 'NUCLEON_He_totalEnergy.txt', get_color('He'), 1., 'He', 2)
 
-    ### DAMPE ###
-    plot_data(ax, 'DAMPE_H_kineticEnergy.txt', get_color('H'), 1., get_color('H'), 1)
+#    ### DAMPE ###
+    plot_data_from_Etot(ax, 'DAMPE_H_totalEnergy.txt', get_color('H'), 1., 'H', 1)
+    plot_data_from_Etot(ax, 'DAMPE_He_totalEnergy.txt', get_color('He'), 1., 'He', 2)
 
     fontsize=20
     ax.text(7e5, yCR(0.),  'H',  color=get_color('H'),  fontsize=fontsize)

@@ -20,14 +20,18 @@ def plot_composition(fCRs, plotname):
     size = len(Z)
     assert(len(fCRs) == size)
 
-    fig = plt.figure(figsize=(10.5, 8))
+    fig = plt.figure(figsize=(12., 8.))
     ax = fig.add_subplot(111)
     set_axes(ax)
     
     x, solar_y = np.loadtxt('data/composition_solar_system.txt',skiprows=2,max_rows=28,usecols=(1,2),unpack=True)
     x = np.arange(size)
+    
+    my_cmap = plt.get_cmap("viridis")
+    rescale = lambda z: (z - np.min(x)) / (np.max(x) - np.min(x))
 
-    ax.bar(x + 0.5, solar_y / solar_y[5], align='edge', width=1.01, linewidth=0, color='tab:blue', alpha=0.65, edgecolor='none', label='Solar System')
+    ax.bar(x + 0.5, solar_y / solar_y[5], align='edge', width=1.01, linewidth=0, alpha=0.65, edgecolor='none', label='Solar System',
+           color = my_cmap(rescale(x)))
     
     color = 'tab:red'
     ax.plot(x + 1.0, fCRs / fCRs[5], color=color, zorder=2)
@@ -168,7 +172,7 @@ if __name__== "__main__":
     x, fCRs = np.loadtxt('data/composition_data_crdb.csv', skiprows=0, usecols=(0, 3), delimiter=',', unpack=True)
     print(x, fCRs)
     plot_composition(fCRs, 'composition_CRIS.pdf')
-#    plot_composition_ratio(fCRs, 'composition_ratio_CRIS.pdf')
+    plot_composition_ratio(fCRs, 'composition_ratio_CRIS.pdf')
 
 #    fCRs = []
 #    for i in range(1,29):
